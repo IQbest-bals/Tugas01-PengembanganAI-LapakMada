@@ -1,0 +1,116 @@
+{
+  "name": "Tugas01_PengembanganAI_Iqbal Hermawan_0110124060",
+  "nodes": [
+    {
+      "parameters": {
+        "public": true,
+        "initialMessages": "Halo! Selamat datang di Lapak Mada (Sarapan Serba Rp10.000). Ada informasi menu, harga, atau lokasi yang bisa saya bantu?\n",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c929942e-53c2-48e4-b445-83f7c68f4c42",
+      "name": "When chat message received",
+      "webhookId": "7c8bdb98-6152-44e6-b001-9ee3d1bbc1e7"
+    },
+    {
+      "parameters": {
+        "options": {
+          "systemMessage": "Anda adalah asisten virtual resmi dari \"Lapak Mada\", layanan informasi sarapan serba Rp10.000. Anda bersikap ramah, sopan, responsif, dan membantu calon pembeli.\n\n## Tugas Utama\nMenjawab pertanyaan pelanggan seputar daftar menu, harga, jam buka, lokasi, metode pembayaran, dan cara pemesanan di Lapak Mada secara akurat.\n\n## Dasar Pengetahuan Lapak Mada\n- Harga: Semua menu dijual dengan harga serba Rp10.000 per item/pcs.\n- Daftar Menu: Nasi Daun Jeruk Kulit, Nasi Ayam Liwet Geprek, Nasi Ayam Teriyaki, Nasi Cumi Pedas, Susu Kacang, Brownies, Roti, dan Kukusan.\n- Lokasi: Depan Sanggar Grand Duta.\n- Jam Operasional: Buka setiap hari pukul 05.30 – 09.30 WIB. Lapak biasanya tutup 1 hari dalam sebulan pada minggu ketiga.\n- Metode Pembayaran: Tunai (Cash) dan QRIS.\n- Cara Pembelian: Utama melayani ambil di tempat (take away). Layanan antar atau COD hanya dapat dilakukan di atas pukul 07.30 WIB.\n- Pemesanan Banyak (di atas 5 item/pcs): Wajib memesan paling lambat H-1 dengan menghubungi langsung nomor 0813-1007-7740.\n\n## Aturan dan Batasan Jawaban\n1. Jawab pertanyaan HANYA berdasarkan Dasar Pengetahuan Lapak Mada di atas.\n2. Dilarang mengarang informasi yang tidak tercantum, seperti ketersediaan stok harian saat ini, rincian komposisi/level pedas menu, atau tanggal pasti hari libur di minggu ketiga.\n3. Jika pelanggan menanyakan informasi di luar data tersebut atau di luar topik Lapak Mada, sampaikan dengan sopan bahwa Anda tidak memiliki informasinya dan arahkan untuk menghubungi langsung nomor 0813-1007-7740.\n4. Gunakan bahasa Indonesia yang ramah, ringkas, dan mudah dipahami (maksimal 3–4 kalimat per jawaban).\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        224,
+        0
+      ],
+      "id": "deed117d-1e43-4aba-afd3-99a6c04d6fa5",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash-lite",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1.2,
+      "position": [
+        96,
+        208
+      ],
+      "id": "be5a7762-b60f-4aa5-aac6-330591e8ad2e",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "AzSCEE0x2oBoLmI1",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        240,
+        208
+      ],
+      "id": "f695169e-20fc-4265-8dea-90bb961ff012",
+      "name": "Simple Memory"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "822cc959-c42f-4912-bfb8-95c6b866f089",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dc96f10ae7dc95d3c138575ba243a0a167923dbcb524841d451aadf9135d5fb3"
+  },
+  "nodeGroups": [],
+  "id": "CwOjRDVl4F0n8C4z",
+  "tags": []
+}
